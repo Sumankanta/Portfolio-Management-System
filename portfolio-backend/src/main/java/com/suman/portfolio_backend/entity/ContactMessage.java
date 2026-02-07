@@ -1,19 +1,22 @@
 package com.suman.portfolio_backend.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.validator.constraints.URL;
+
+import java.time.LocalDateTime;
+
 
 @Entity
-@Table(name = "clients")
+@Table(name = "contact_messages")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Client {
+public class ContactMessage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +25,13 @@ public class Client {
     @NotBlank
     private String name;
 
-    private String logoUrl;
+    @Email
+    @NotBlank
+    private String email;
 
-    @URL
-    private String websiteUrl;
+    @Size(max = 2000)
+    private String message;
 
-    @Size(max = 1000)
-    private String description;
+    private LocalDateTime sentAt = LocalDateTime.now();
 }
+
