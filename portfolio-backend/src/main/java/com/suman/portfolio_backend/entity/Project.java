@@ -8,7 +8,9 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "projects")
@@ -39,7 +41,7 @@ public class Project {
     private String sourceCodeUrl;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
 //    Relationships
 
@@ -56,8 +58,8 @@ public class Project {
             uniqueConstraints = @UniqueConstraint(columnNames = {"project_id", "skill_id"})
     )
     @Builder.Default
-    @JsonIgnoreProperties({"projects"})
-    private List<Skill> skills = new ArrayList<>();
+//    @JsonIgnoreProperties({"projects"})
+    private Set<Skill> skills = new HashSet<>();
 
     // Helper methods for managing skills relationship
 
@@ -83,6 +85,6 @@ public class Project {
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 }

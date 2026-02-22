@@ -13,7 +13,7 @@ import java.time.Period;
 @Entity
 @Table(name = "past_employment", indexes = {
         @Index(name = "idx_employment_user", columnList = "user_id"),
-        @Index(name = "idx_employment_dates", columnList = "startData, endDate")
+        @Index(name = "idx_employment_dates", columnList = "start_date, end_date")
 })
 @Getter
 @Setter
@@ -27,7 +27,6 @@ public class PastEmployment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    Relationship
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnoreProperties({"employments", "chatMessages", "userRoles", "payments", "uiSettings"})
@@ -56,32 +55,37 @@ public class PastEmployment {
 
     @PrePersist
     @PreUpdate
-    protected void validateDates(){
-        if(isCurrent != null && isCurrent){
+    protected void validateDates() {
+        if (isCurrent != null && isCurrent) {
             endDate = null;
         }
-        if(endDate != null && startDate != null && endDate.isBefore(startDate)){
-            throw new IllegalArgumentException("End date can't be before start date");
+        if (endDate != null && startDate != null && endDate.isBefore(startDate)) {
+            throw new IllegalArgumentException("End date cannot be before start date");
         }
     }
 
-    // Helper method
-    //Calculate duration of employment in month
-    public long getDurationInMonths(){
-        if(startDate == null){
+    // Helper methods
+
+    /**
+     * Calculate duration of employment in months
+     */
+    public long getDurationInMonths() {
+        if (startDate == null) {
             return 0;
         }
         LocalDate end = (isCurrent != null && isCurrent) ? LocalDate.now() : endDate;
-        if(end == null){
+        if (end == null) {
             end = LocalDate.now();
         }
         Period period = Period.between(startDate, end);
         return period.getYears() * 12L + period.getMonths();
     }
 
-    //Get formatted during string (e.g., "1 year 3 months")
-    public String getFormattedDuration(){
-        if(startDate == null){
+    /**
+     * Get formatted duration string (e.g., "2 years 3 months")
+     */
+    public String getFormattedDuration() {
+        if (startDate == null) {
             return "N/A";
         }
         LocalDate end = (isCurrent != null && isCurrent) ? LocalDate.now() : endDate;
@@ -96,14 +100,20 @@ public class PastEmployment {
             if (period.getYears() > 1) duration.append("s");
         }
         if (period.getMonths() > 0) {
-            if (!duration.isEmpty()) duration.append(" ");
+            if (duration.length() > 0) duration.append(" ");
             duration.append(period.getMonths()).append(" month");
             if (period.getMonths() > 1) duration.append("s");
         }
-        if (duration.isEmpty()) {
+        if (duration.length() == 0) {
             duration.append("Less than a month");
         }
         return duration.toString();
     }
-}
 
+    /**
+     * Check if employment is currently active
+     */
+    public boolean isCurrentlyEmployed() {
+        return Boolean.TRUE.equals(isCurrent);
+    }
+}
