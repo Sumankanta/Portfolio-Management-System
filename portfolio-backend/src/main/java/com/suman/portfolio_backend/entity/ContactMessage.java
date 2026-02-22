@@ -1,19 +1,22 @@
 package com.suman.portfolio_backend.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
+
 @Entity
-@Table(name = "skills")
+@Table(name = "contact_messages")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Skill {
+public class ContactMessage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,12 +25,13 @@ public class Skill {
     @NotBlank
     private String name;
 
+    @Email
     @NotBlank
-    private String category;
+    private String email;
 
-    @Min(0)
-    @Max(100)
-    private Integer proficiencyLevel;
+    @Size(max = 2000)
+    private String message;
 
-    private String iconUrl;
+    private LocalDateTime sentAt = LocalDateTime.now();
 }
+
