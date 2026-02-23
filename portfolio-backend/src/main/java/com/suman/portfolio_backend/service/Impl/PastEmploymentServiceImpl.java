@@ -3,6 +3,7 @@ package com.suman.portfolio_backend.service.Impl;
 import com.suman.portfolio_backend.dto.PastEmploymentDTO;
 import com.suman.portfolio_backend.entity.PastEmployment;
 import com.suman.portfolio_backend.entity.User;
+import com.suman.portfolio_backend.exception.ResourceNotFoundException;
 import com.suman.portfolio_backend.repository.PastEmploymentRepository;
 import com.suman.portfolio_backend.repository.UserRepository;
 import com.suman.portfolio_backend.service.interfaces.PastEmploymentService;
@@ -33,7 +34,7 @@ public class PastEmploymentServiceImpl implements PastEmploymentService {
         User user = userRepository.findById(pastEmploymentDTO.getUserId())
                 .orElseThrow(() -> {
                     log.error("User not found with id: {}", pastEmploymentDTO.getUserId());
-                    return new RuntimeException("User not found");
+                    return new ResourceNotFoundException("User not found with ID: " + pastEmploymentDTO.getUserId());
                 });
 
         PastEmployment employment = modelMapper.map(pastEmploymentDTO, PastEmployment.class);
@@ -53,7 +54,7 @@ public class PastEmploymentServiceImpl implements PastEmploymentService {
         PastEmployment employment = pastEmploymentRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("Employment not found with id : {}", id);
-                    return new RuntimeException("Employment not found");
+                    return new ResourceNotFoundException("Employment not found with ID: " + id);
                 });
 
         employment.setCompanyName(pastEmploymentDTO.getCompanyName());
@@ -74,7 +75,7 @@ public class PastEmploymentServiceImpl implements PastEmploymentService {
 
         PastEmployment employment = pastEmploymentRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.warn("Attempted to deleteEmployment non-existing employment with ID: {}", id);
+                    log.warn("Attempted to delete non-existing employment with ID: {}", id);
                     return new RuntimeException("Employment not found");
                 });
 
@@ -86,14 +87,14 @@ public class PastEmploymentServiceImpl implements PastEmploymentService {
     public PastEmploymentDTO getById(Long id) {
 
         PastEmployment employment = pastEmploymentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employment not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Employment not found with ID: " + id));
 
         return convertToDTO(employment);
     }
 
     @Override
     public List<PastEmploymentDTO> getAll() {
-        log.debug("Fetching all employment ");
+        log.debug("Fetching all employment");
         return pastEmploymentRepository.findAll()
                 .stream()
                 .sorted(Comparator.comparing(PastEmployment::getStartDate).reversed())
@@ -104,7 +105,7 @@ public class PastEmploymentServiceImpl implements PastEmploymentService {
     @Override
     public List<PastEmploymentDTO> getByUser(Long userId) {
 
-        log.debug("Fetching employment with ID: {}", userId);
+        log.debug("Fetching employment records for user ID: {}", userId);
         return pastEmploymentRepository.findByUserId(userId)
                 .stream()
                 .sorted(Comparator.comparing(PastEmployment::getStartDate).reversed())

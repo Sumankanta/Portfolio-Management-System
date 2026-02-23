@@ -2,6 +2,8 @@ package com.suman.portfolio_backend.service.Impl;
 
 import com.suman.portfolio_backend.dto.ClientDTO;
 import com.suman.portfolio_backend.entity.Client;
+import com.suman.portfolio_backend.exception.BadRequestException;
+import com.suman.portfolio_backend.exception.ResourceNotFoundException;
 import com.suman.portfolio_backend.repository.ClientRepository;
 import com.suman.portfolio_backend.service.interfaces.ClientService;
 import jakarta.transaction.Transactional;
@@ -36,13 +38,13 @@ public class ClientServiceImpl implements ClientService {
 
         Client client = clientRepository.findById(id).orElseThrow(()-> {
             log.error("Client not found with id : {}", id);
-            return new RuntimeException("Client not found");
+            return new ResourceNotFoundException("Client not found with ID: " + id);
         });
 
         client.setName(clientDTO.getName());
         client.setLogoUrl(clientDTO.getLogoUrl());
         client.setWebsiteUrl(clientDTO.getWebsiteUrl());
-        client.setDescription(client.getDescription());
+        client.setDescription(clientDTO.getDescription());
 
         log.info("Client updated successfully with ID: {}", id);
         return convertToDTO(client);
@@ -52,13 +54,13 @@ public class ClientServiceImpl implements ClientService {
     public void deleteClient(Long id) {
         log.warn("Deleting client ID: {}", id);
         Client client = clientRepository.findById(id).orElseThrow(()-> {
-            log.warn("Attempted to deleteEmployment non-existing client with ID: {}", id);
-            return new RuntimeException("Client not found");
+            log.warn("Attempted to delete non-existing client with ID: {}", id);
+            return new ResourceNotFoundException("Client not found with ID: " + id);
         });
 
         if(client.hasProjects()){
-            log.warn("Attempted to deleteEmployment a client having project with clientID: {}", id);
-            throw new RuntimeException("Cannot deleteEmployment client with existing projects");
+            log.warn("Attempted to delete a client having project with clientID: {}", id);
+            throw new BadRequestException("Cannot delete client with existing projects");
         }
 
         clientRepository.deleteById(id);
