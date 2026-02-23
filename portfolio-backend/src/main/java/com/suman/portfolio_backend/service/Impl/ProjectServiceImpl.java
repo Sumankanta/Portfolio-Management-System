@@ -2,6 +2,7 @@ package com.suman.portfolio_backend.service.Impl;
 
 import com.suman.portfolio_backend.dto.ProjectDTO;
 import com.suman.portfolio_backend.entity.*;
+import com.suman.portfolio_backend.exception.ResourceNotFoundException;
 import com.suman.portfolio_backend.repository.*;
 import com.suman.portfolio_backend.service.interfaces.ProjectService;
 import jakarta.transaction.Transactional;
@@ -37,7 +38,7 @@ public class ProjectServiceImpl implements ProjectService {
             Client client = clientRepository.findById(projectDTO.getClientId())
                     .orElseThrow(() -> {
                         log.error("Client not found with ID: {}", projectDTO.getClientId());
-                        return new RuntimeException("Client not found");
+                        return new ResourceNotFoundException("Client not found with ID: " + projectDTO.getClientId());
                     });
             project.setClient(client);
         }
@@ -61,7 +62,7 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("Project not found with ID: {}", id);
-                    return new RuntimeException("Project not found");
+                    return new ResourceNotFoundException("Project not found with ID: " + id);
                 });
 
         project.setTitle(projectDTO.getTitle());
@@ -69,6 +70,27 @@ public class ProjectServiceImpl implements ProjectService {
         project.setThumbnailUrl(projectDTO.getThumbnailUrl());
         project.setLiveDemoUrl(projectDTO.getLiveDemoUrl());
         project.setSourceCodeUrl(projectDTO.getSourceCodeUrl());
+
+        // Update client
+        if (projectDTO.getClientId() != null) {
+            Client client = clientRepository.findById(projectDTO.getClientId())
+                    .orElseThrow(() ->{
+                        log.error("Client not found with ID: {}", id);
+                        return new ResourceNotFoundException("Client not found with ID: " + projectDTO.getClientId());
+                    });
+            project.setClient(client);
+        }
+
+        // Update skills
+        if (projectDTO.getSkillIds() != null) {
+            Set<Skill> skills = new HashSet<>(skillRepository.findAllById(projectDTO.getSkillIds()));
+
+            if (skills.size() != projectDTO.getSkillIds().size()) {
+                throw new ResourceNotFoundException("One or more skills not found");
+            }
+
+            project.setSkills(skills);
+        }
 
         log.info("Project updated successfully with ID: {}", id);
 
@@ -79,7 +101,7 @@ public class ProjectServiceImpl implements ProjectService {
     public void deletedProject(Long id) {
         log.info("Deleting project with ID: {}", id);
         if (!projectRepository.existsById(id)) {
-            log.warn("Attempted to deleteEmployment non-existing project with ID: {}", id);
+            log.warn("Attempted to delete non-existing project with ID: {}", id);
             throw new RuntimeException("Project not found");
         }
         projectRepository.deleteById(id);
