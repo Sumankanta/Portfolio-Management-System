@@ -1,51 +1,44 @@
 package com.suman.portfolio_backend.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@ToString(exclude = {"userRoles"})
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Column(unique = true)
     private String username;
-
-    @Email
-    @NotBlank
-    @Column(unique = true)
     private String email;
+    private String password;
 
-    @NotBlank
-    private String passwordHash;
-
-    @NotBlank
     private String fullName;
-
     private String bio;
-
     private String profileImageUrl;
-
-    @Pattern(regexp = "^[0-9]{10}$", message = "Invalid phone number")
     private String contactNumber;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "user")
-    private List<PastEmployment> employments;
+    // 🔥 THIS FIXES YOUR ERROR's
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<UserRole> userRoles = new HashSet<>();
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 }
