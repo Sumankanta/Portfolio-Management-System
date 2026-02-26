@@ -61,7 +61,7 @@ public class Role {
         userRole.setRole(null);
     }
 
-    // Get count of users with this role
+    // Get count of users with this roles
     public int getUserCount() {
         return userRoles != null ? userRoles.size() : 0;
     }

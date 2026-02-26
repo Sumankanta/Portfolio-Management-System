@@ -42,7 +42,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //    @Query("SELECT u FROM User u WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
 //            "OR LOWER(u.email) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
 //    List<User> searchByUsernameOrEmail(@Param("searchTerm") String searchTerm);
-//
+//  unnecessary method
 //    @Query("SELECT u FROM User u WHERE u.createdAt >= :date ORDER BY u.createdAt DESC")
 //    List<User> findRecentUser(@Param("date") LocalDateTime date);
 }

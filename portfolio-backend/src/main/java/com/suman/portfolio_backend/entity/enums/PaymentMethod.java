@@ -1,5 +1,6 @@
 package com.suman.portfolio_backend.entity.enums;
 
+//PaymentMethod DTO
 public enum PaymentMethod {
     CARD,
     UPI,

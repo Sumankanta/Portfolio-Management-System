@@ -53,7 +53,7 @@ public class Skill {
         return projects != null ? projects.size() : 0;
     }
 
-    // Helper method to check if skill is used in any project
+    // Helper method to check if skill is used in any projects
     public boolean isUsedInProjects() {
         return projects != null && !projects.isEmpty();
     }

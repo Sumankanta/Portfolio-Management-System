@@ -32,7 +32,7 @@ public class User {
 
     private LocalDateTime createdAt;
 
-    // 🔥 THIS FIXES YOUR ERROR
+    // 🔥 THIS FIXES YOUR ERROR's
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<UserRole> userRoles = new HashSet<>();
