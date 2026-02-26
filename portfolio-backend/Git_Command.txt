@@ -1,0 +1,10 @@
+git init → Initialize a new Git repository.
+git branch → List branches.
+git status -s → Show short status of tracked/untracked files.
+git branch {name} → Create a new branch.
+git checkout test → Switch to branch test.
+git pull origin portfolio → Pull changes from remote branch portfolio.
+git stash apply → Reapply stashed changes.
+git commit -m "" → Commit staged changes with a message.
+git reflog → Show history of branch movements and commits.
+git reset --hard "HEAD@{}" → Reset to a specific reflog entry.
