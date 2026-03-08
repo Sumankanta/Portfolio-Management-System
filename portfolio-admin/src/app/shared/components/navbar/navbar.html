@@ -1,1 +1,167 @@
-<p>navbar works!</p>
+<nav class="navbar-shell navbar navbar-expand px-3 px-md-4">
+
+  <!-- ── LEFT ─────────────────────────────────── -->
+  <div class="d-flex align-items-center gap-2">
+
+    <!-- Hamburger -->
+    <button class="btn btn-ghost btn-icon" (click)="toggleSidebar.emit()" title="Toggle Sidebar">
+      <i class="bi bi-list fs-5"></i>
+    </button>
+
+    <!-- Brand -->
+    <a class="d-flex align-items-center gap-2 text-decoration-none" routerLink="/admin/dashboard">
+      <div class="brand-icon">
+        <i class="bi bi-code-slash"></i>
+      </div>
+      <span class="brand-name d-none d-md-inline">Portfolio Admin</span>
+    </a>
+
+  </div>
+
+  <!-- ── CENTER — Search ───────────────────────── -->
+  <div class="nav-search d-none d-md-block mx-auto">
+    <div class="input-group input-group-sm">
+      <span class="input-group-text bg-body border-end-0">
+        <i class="bi bi-search text-muted"></i>
+      </span>
+      <input
+        type="text"
+        class="form-control border-start-0 ps-0 rounded-pill-end"
+        placeholder="Search projects, skills..."
+        [(ngModel)]="searchQuery"
+        style="border-radius: 0 20px 20px 0;">
+    </div>
+  </div>
+
+  <!-- ── RIGHT — Actions ──────────────────────── -->
+  <div class="d-flex align-items-center gap-1 ms-auto">
+
+    <!-- Theme Toggle -->
+    <button
+      class="btn btn-ghost btn-icon"
+      (click)="toggleTheme()"
+      [title]="isDark ? 'Light Mode' : 'Dark Mode'">
+      <i class="bi fs-6"
+        [class.bi-moon-stars-fill]="!isDark"
+        [class.bi-sun-fill]="isDark">
+      </i>
+    </button>
+
+    <!-- ── Notifications Dropdown ───────────────── -->
+    <div class="position-relative">
+      <button
+        class="btn btn-ghost btn-icon position-relative"
+        (click)="openNotifs($event)"
+        title="Notifications">
+        <i class="bi bi-bell fs-6"></i>
+        @if (unreadCount > 0) {
+          <span class="notif-badge badge rounded-pill bg-danger position-absolute">
+            {{ unreadCount }}
+          </span>
+        }
+      </button>
+
+      @if (showNotifs) {
+        <div class="dropdown-card notif-card shadow animate-fade-in"
+             (click)="$event.stopPropagation()">
+
+          <!-- Header -->
+          <div class="d-flex align-items-center justify-content-between px-3 py-2 border-bottom">
+            <span class="fw-bold small">Notifications</span>
+            <button class="btn btn-link btn-sm p-0 text-decoration-none" (click)="markAllRead()">
+              <small>Mark all read</small>
+            </button>
+          </div>
+
+          <!-- Items -->
+          <div class="notif-scroll">
+            @for (n of notifications; track n.id) {
+              <div
+                class="notif-item d-flex align-items-start gap-2 px-3 py-2"
+                [class.notif-unread]="!n.read"
+                (click)="markRead(n)">
+
+                <div class="notif-icon flex-shrink-0" [ngClass]="n.iconClass">
+                  <i class="bi" [ngClass]="n.icon"></i>
+                </div>
+
+                <div class="flex-grow-1 overflow-hidden">
+                  <p class="small mb-0 text-truncate" style="color: var(--text-primary);">
+                    {{ n.title }}
+                  </p>
+                  <small class="text-muted">{{ n.time }}</small>
+                </div>
+
+                @if (!n.read) {
+                  <span class="dot-unread flex-shrink-0 mt-1"></span>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Footer -->
+          <div class="border-top text-center py-2">
+            <a routerLink="/admin/system-logs" class="small fw-semibold text-decoration-none"
+               style="color: var(--primary);" (click)="showNotifs = false">
+              View all activity
+            </a>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- ── User Dropdown ────────────────────────── -->
+    <div class="position-relative">
+      <button class="user-btn d-flex align-items-center gap-2"
+              (click)="openUserMenu($event)">
+        <div class="user-avatar">{{ userInitials }}</div>
+        <div class="d-none d-md-flex flex-column align-items-start">
+          <span class="user-name">{{ currentUser?.fullName }}</span>
+          <span class="user-role">{{ currentUser?.role }}</span>
+        </div>
+        <i class="bi bi-chevron-down small text-muted d-none d-md-inline"
+           [class.chevron-up]="showUserMenu"></i>
+      </button>
+
+      @if (showUserMenu) {
+        <div class="dropdown-card user-card shadow animate-fade-in"
+             (click)="$event.stopPropagation()">
+
+          <!-- User info -->
+          <div class="d-flex align-items-center gap-2 px-3 py-3 border-bottom">
+            <div class="user-avatar lg flex-shrink-0">{{ userInitials }}</div>
+            <div class="overflow-hidden">
+              <div class="small fw-semibold text-truncate" style="color: var(--text-primary);">
+                {{ currentUser?.fullName }}
+              </div>
+              <div class="small text-muted text-truncate">{{ currentUser?.email }}</div>
+            </div>
+          </div>
+
+          <!-- Menu items -->
+          <div class="py-1">
+            <a class="dropdown-item d-flex align-items-center gap-2 px-3 py-2"
+               routerLink="/admin/dashboard" (click)="showUserMenu = false">
+              <i class="bi bi-speedometer2 text-muted"></i>
+              <span class="small">Dashboard</span>
+            </a>
+            <a class="dropdown-item d-flex align-items-center gap-2 px-3 py-2"
+               routerLink="/admin/ui-management" (click)="showUserMenu = false">
+              <i class="bi bi-gear text-muted"></i>
+              <span class="small">Settings</span>
+            </a>
+          </div>
+
+          <div class="border-top py-1">
+            <button class="dropdown-item d-flex align-items-center gap-2 px-3 py-2 w-100 text-danger"
+                    (click)="logout()">
+              <i class="bi bi-box-arrow-right"></i>
+              <span class="small">Logout</span>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+  </div>
+</nav>

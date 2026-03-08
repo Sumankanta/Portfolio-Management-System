@@ -1,0 +1,30 @@
+.admin-shell {
+  min-height: 100vh;
+  background: var(--bg-body);
+}
+
+.main-content {
+  margin-left: var(--sidebar-width);
+  padding-top: var(--navbar-height);
+  min-height: 100vh;
+  background: var(--bg-body);
+  transition: margin-left var(--transition-layout);
+}
+
+.main-content.collapsed {
+  margin-left: var(--sidebar-collapsed-width);
+}
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  backdrop-filter: blur(3px);
+}
+
+@media (max-width: 991px) {
+  .main-content {
+    margin-left: 0 !important;
+  }
+}

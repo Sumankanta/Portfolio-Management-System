@@ -1,0 +1,129 @@
+/* ── Shell ──────────────────────────────────────── */
+.navbar-shell {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--navbar-height);
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  z-index: 1000;
+}
+
+/* ── Brand ──────────────────────────────────────── */
+.brand-icon {
+  width: 34px; height: 34px;
+  background: var(--primary);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 16px; flex-shrink: 0;
+}
+.brand-name {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 15px;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+/* ── Search ─────────────────────────────────────── */
+.nav-search { width: 320px; }
+.nav-search .input-group-text,
+.nav-search .form-control {
+  background: var(--bg-body) !important;
+  border-color: var(--border) !important;
+  font-size: 13px;
+}
+.nav-search .form-control:focus {
+  box-shadow: none !important;
+  border-color: var(--border-focus) !important;
+}
+.nav-search .input-group:focus-within .input-group-text {
+  border-color: var(--border-focus) !important;
+}
+
+/* ── Action Buttons ─────────────────────────────── */
+.btn-ghost {
+  background: none; border: none; color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+.btn-ghost:hover { background: var(--primary-light); color: var(--primary); }
+.btn-icon { width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; }
+
+/* ── Notification Badge ─────────────────────────── */
+.notif-badge {
+  top: 3px !important; right: 3px !important;
+  font-size: 9px !important;
+  padding: 2px 5px !important;
+  min-width: 16px;
+  border: 2px solid var(--bg-card);
+}
+
+/* ── Dropdown Cards (shared) ────────────────────── */
+.dropdown-card {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  z-index: 1050;
+  overflow: hidden;
+}
+
+/* ── Notification Card ──────────────────────────── */
+.notif-card { width: 310px; }
+
+.notif-scroll { max-height: 280px; overflow-y: auto; }
+
+.notif-item {
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  border-bottom: 1px solid var(--border);
+}
+.notif-item:last-child { border-bottom: none; }
+.notif-item:hover      { background: var(--bg-hover); }
+.notif-item.notif-unread { background: rgba(79,110,247,0.03); }
+
+.notif-icon {
+  width: 34px; height: 34px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.notif-icon.green  { background: var(--success-light); color: var(--success); }
+.notif-icon.orange { background: var(--warning-light); color: var(--warning); }
+.notif-icon.blue   { background: var(--primary-light); color: var(--primary); }
+.notif-icon.red    { background: var(--danger-light);  color: var(--danger); }
+
+.dot-unread {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--primary); flex-shrink: 0;
+}
+
+/* ── User Button ────────────────────────────────── */
+.user-btn {
+  background: none; border: none; cursor: pointer;
+  padding: 5px 8px; border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+.user-btn:hover { background: var(--bg-hover); }
+
+.user-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff; font-size: 13px; font-weight: 700;
+  font-family: var(--font-display);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.user-avatar.lg { width: 38px; height: 38px; font-size: 14px; }
+
+.user-name { font-size: 13px; font-weight: 600; color: var(--text-primary); line-height: 1.2; }
+.user-role { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+.chevron-up { transform: rotate(180deg); transition: transform var(--transition-fast); }
+
+/* ── User Card ──────────────────────────────────── */
+.user-card { width: 220px; }
+
+.dropdown-item:hover { background: var(--bg-hover) !important; color: var(--primary) !important; }
+.dropdown-item.text-danger:hover { background: var(--danger-light) !important; color: var(--danger) !important; }

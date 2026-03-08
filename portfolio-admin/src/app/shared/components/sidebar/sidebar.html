@@ -1,1 +1,80 @@
-<p>sidebar works!</p>
+<aside class="sidebar" [class.collapsed]="collapsed">
+
+  <!-- ── Main Nav ──────────────────────────────── -->
+  <nav class="sidebar-nav">
+
+    @if (!collapsed) {
+      <div class="nav-section-label">Main Menu</div>
+    }
+
+    @for (item of mainItems; track item.route) {
+      <a
+        class="nav-item"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        #rla="routerLinkActive"
+        [title]="collapsed ? item.label : ''">
+
+        <span
+          class="nav-icon-wrap"
+          [style.background]="rla.isActive ? item.color + '20' : ''"
+          [style.color]="rla.isActive ? item.color : ''">
+          <i class="bi" [ngClass]="item.icon"></i>
+        </span>
+
+        @if (!collapsed) {
+          <span class="nav-label">{{ item.label }}</span>
+          @if (item.badge) {
+            <span class="nav-badge">{{ item.badge }}</span>
+          }
+        }
+      </a>
+    }
+
+    <div class="nav-divider"></div>
+
+    @if (!collapsed) {
+      <div class="nav-section-label">System</div>
+    }
+
+    @for (item of systemItems; track item.route) {
+      <a
+        class="nav-item"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        #rla2="routerLinkActive"
+        [title]="collapsed ? item.label : ''">
+
+        <span
+          class="nav-icon-wrap"
+          [style.background]="rla2.isActive ? item.color + '20' : ''"
+          [style.color]="rla2.isActive ? item.color : ''">
+          <i class="bi" [ngClass]="item.icon"></i>
+        </span>
+
+        @if (!collapsed) {
+          <span class="nav-label">{{ item.label }}</span>
+        }
+      </a>
+    }
+
+  </nav>
+
+  <!-- ── Footer ───────────────────────────────── -->
+  <div class="sidebar-footer">
+    @if (!collapsed) {
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">AU</div>
+        <div class="sidebar-user-info">
+          <span class="sidebar-user-name">Admin User</span>
+          <span class="sidebar-user-role">Administrator</span>
+        </div>
+      </div>
+    }
+    <button class="logout-btn" (click)="logout()" [title]="collapsed ? 'Logout' : ''">
+      <i class="bi bi-box-arrow-right"></i>
+      @if (!collapsed) { <span>Logout</span> }
+    </button>
+  </div>
+
+</aside>

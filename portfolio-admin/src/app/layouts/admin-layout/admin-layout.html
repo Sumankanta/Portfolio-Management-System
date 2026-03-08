@@ -1,1 +1,22 @@
-<p>admin-layout works!</p>
+<div class="admin-shell">
+
+  <!-- Fixed Navbar -->
+  <app-navbar
+    [sidebarCollapsed]="sidebarCollapsed()"
+    (toggleSidebar)="toggle()">
+  </app-navbar>
+
+  <!-- Fixed Sidebar -->
+  <app-sidebar [collapsed]="sidebarCollapsed()"></app-sidebar>
+
+  <!-- Main Scrollable Area -->
+  <main class="main-content" [class.collapsed]="sidebarCollapsed()">
+    <router-outlet />
+  </main>
+
+  <!-- Mobile overlay -->
+  @if (!sidebarCollapsed() && isMobile()) {
+    <div class="sidebar-overlay" (click)="toggle()"></div>
+  }
+
+</div>

@@ -1,0 +1,28 @@
+.auth-brand {
+  width: 42%;
+  background: linear-gradient(145deg, #3A56D4 0%, #4F6EF7 45%, #6C63FF 100%);
+  position: relative; overflow: hidden; min-height: 100vh;
+}
+.brand-logo {
+  width: 60px; height: 60px;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center; color: #fff;
+}
+.feature-icon {
+  width: 34px; height: 34px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; color: #fff; flex-shrink: 0;
+}
+.deco { position: absolute; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); pointer-events: none; }
+.c1   { width: 400px; height: 400px; top: -120px; right: -120px; }
+.c2   { width: 250px; height: 250px; bottom: -60px; left: -60px; background: rgba(255,255,255,0.04); }
+
+.input-group-text { border-color: var(--border) !important; color: var(--text-muted); }
+.form-control, .form-select { border-color: var(--border) !important; }
+.form-control:focus, .form-select:focus { border-color: var(--border-focus) !important; box-shadow: none !important; }
+.input-group:focus-within .input-group-text { border-color: var(--border-focus) !important; }
+.cursor-pointer { cursor: pointer; }

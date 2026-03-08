@@ -1,1 +1,201 @@
-<p>register works!</p>
+<div class="min-vh-100 d-flex">
+
+  <!-- LEFT — Brand -->
+  <div class="auth-brand d-none d-lg-flex flex-column justify-content-center align-items-start px-5">
+    <div class="brand-logo mb-4">
+      <i class="bi bi-code-slash fs-2"></i>
+    </div>
+    <h1 class="display-5 fw-bold text-white mb-2">Join the<br>Platform</h1>
+    <p class="text-white-50 mb-5">Set up your admin account and start managing your portfolio</p>
+    <div class="d-flex flex-column gap-3">
+      <div class="d-flex align-items-center gap-3 text-white">
+        <div class="feature-icon"><i class="bi bi-person-check"></i></div>
+        <span class="small fw-medium">Role-based Access Control</span>
+      </div>
+      <div class="d-flex align-items-center gap-3 text-white">
+        <div class="feature-icon"><i class="bi bi-shield-lock"></i></div>
+        <span class="small fw-medium">JWT Secured Authentication</span>
+      </div>
+      <div class="d-flex align-items-center gap-3 text-white">
+        <div class="feature-icon"><i class="bi bi-lightning-charge"></i></div>
+        <span class="small fw-medium">Full Admin Capabilities</span>
+      </div>
+      <div class="d-flex align-items-center gap-3 text-white">
+        <div class="feature-icon"><i class="bi bi-graph-up-arrow"></i></div>
+        <span class="small fw-medium">Real-time Analytics</span>
+      </div>
+    </div>
+    <div class="deco c1"></div>
+    <div class="deco c2"></div>
+  </div>
+
+  <!-- RIGHT — Form -->
+  <div class="flex-grow-1 d-flex align-items-center justify-content-center p-4"
+       style="background: var(--bg-body); overflow-y: auto;">
+
+    <div class="w-100 animate-fade-in-up" style="max-width: 430px;">
+
+      <a routerLink="/auth/login" class="d-inline-flex align-items-center gap-2 small fw-semibold text-decoration-none text-secondary mb-4">
+        <i class="bi bi-arrow-left"></i> Back to Login
+      </a>
+
+      <div class="mb-4">
+        <h2 class="fw-bold mb-1" style="font-family: var(--font-display); color: var(--text-primary);">
+          Create Account
+        </h2>
+        <p class="text-secondary small">Fill in your details to get started</p>
+      </div>
+
+      @if (errorMsg) {
+        <div class="alert alert-danger d-flex align-items-center gap-2 py-2 animate-fade-in">
+          <i class="bi bi-exclamation-circle-fill"></i>
+          <span class="small">{{ errorMsg }}</span>
+        </div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+        <!-- Full Name -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold small">Full Name</label>
+          <div class="input-group">
+            <span class="input-group-text bg-body border-end-0">
+              <i class="bi bi-person text-muted"></i>
+            </span>
+            <input type="text" class="form-control border-start-0 ps-0"
+              formControlName="fullName" placeholder="John Doe"
+              [class.is-invalid]="isInvalid('fullName')">
+            @if (isInvalid('fullName')) {
+              <div class="invalid-feedback">
+                {{ f['fullName'].errors?.['required'] ? 'Full name is required.' : 'Min 3 characters.' }}
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold small">Email Address</label>
+          <div class="input-group">
+            <span class="input-group-text bg-body border-end-0">
+              <i class="bi bi-envelope text-muted"></i>
+            </span>
+            <input type="email" class="form-control border-start-0 ps-0"
+              formControlName="email" placeholder="you@example.com"
+              [class.is-invalid]="isInvalid('email')">
+            @if (isInvalid('email')) {
+              <div class="invalid-feedback">
+                {{ f['email'].errors?.['required'] ? 'Email is required.' : 'Enter a valid email.' }}
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Role -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold small">Role</label>
+          <div class="input-group">
+            <span class="input-group-text bg-body border-end-0">
+              <i class="bi bi-person-badge text-muted"></i>
+            </span>
+            <select class="form-select border-start-0 ps-2"
+              formControlName="role"
+              [class.is-invalid]="isInvalid('role')">
+              <option value="" disabled selected>Select a role</option>
+              <option value="ADMIN">Admin — Full access</option>
+              <option value="VIEWER">Viewer — Read only</option>
+            </select>
+            @if (isInvalid('role')) {
+              <div class="invalid-feedback">Please select a role.</div>
+            }
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-1">
+          <label class="form-label fw-semibold small">Password</label>
+          <div class="input-group">
+            <span class="input-group-text bg-body border-end-0">
+              <i class="bi bi-lock text-muted"></i>
+            </span>
+            <input [type]="showPwd ? 'text' : 'password'"
+              class="form-control border-start-0 border-end-0 ps-0"
+              formControlName="password"
+              placeholder="Min 8 chars, 1 uppercase, 1 number"
+              [class.is-invalid]="isInvalid('password')"
+              (input)="onPasswordInput()">
+            <button type="button"
+              class="input-group-text bg-body border-start-0 cursor-pointer"
+              (click)="showPwd = !showPwd" tabindex="-1">
+              <i class="bi" [class.bi-eye]="!showPwd" [class.bi-eye-slash]="showPwd"></i>
+            </button>
+            @if (isInvalid('password')) {
+              <div class="invalid-feedback">
+                @if (f['password'].errors?.['required']) { Password is required. }
+                @else if (f['password'].errors?.['minlength']) { Min 8 characters. }
+                @else { Must have uppercase letter and number. }
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Strength Bar (Bootstrap progress) -->
+        @if (f['password'].value) {
+          <div class="d-flex align-items-center gap-2 mb-3 mt-2">
+            <div class="progress flex-grow-1" style="height: 5px;">
+              <div
+                class="progress-bar"
+                [class]="'bg-' + strengthColor"
+                [style.width.%]="strengthLevel * 25"
+                style="transition: width 0.3s ease;">
+              </div>
+            </div>
+            <span class="small fw-bold" [class]="'text-' + strengthColor" style="min-width: 40px;">
+              {{ strengthLabel }}
+            </span>
+          </div>
+        }
+
+        <!-- Confirm Password -->
+        <div class="mb-4">
+          <label class="form-label fw-semibold small">Confirm Password</label>
+          <div class="input-group">
+            <span class="input-group-text bg-body border-end-0">
+              <i class="bi bi-shield-lock text-muted"></i>
+            </span>
+            <input [type]="showConfirm ? 'text' : 'password'"
+              class="form-control border-start-0 border-end-0 ps-0"
+              formControlName="confirmPassword"
+              placeholder="Repeat your password"
+              [class.is-invalid]="isInvalid('confirmPassword')">
+            <button type="button"
+              class="input-group-text bg-body border-start-0 cursor-pointer"
+              (click)="showConfirm = !showConfirm" tabindex="-1">
+              <i class="bi" [class.bi-eye]="!showConfirm" [class.bi-eye-slash]="showConfirm"></i>
+            </button>
+            @if (isInvalid('confirmPassword')) {
+              <div class="invalid-feedback">Passwords do not match.</div>
+            }
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn btn-primary w-100 py-2 mb-3" [disabled]="loading">
+          @if (loading) {
+            <span class="spinner-border spinner-border-sm me-2"></span> Creating Account...
+          } @else {
+            <i class="bi bi-person-plus me-2"></i> Create Account
+          }
+        </button>
+
+        <p class="text-center small" style="color: var(--text-secondary);">
+          Already have an account?
+          <a routerLink="/auth/login" class="fw-semibold text-decoration-none" style="color: var(--primary);">
+            Sign in here
+          </a>
+        </p>
+
+      </form>
+    </div>
+  </div>
+</div>

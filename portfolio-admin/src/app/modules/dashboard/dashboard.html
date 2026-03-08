@@ -1,1 +1,195 @@
-<p>dashboard works!</p>
+<div class="dashboard-page">
+
+  <!-- ══════════════════════════════════════════
+       HEADER
+  ═══════════════════════════════════════════════ -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">{{ greeting }}, Admin 👋</h1>
+      <p class="page-subtitle">{{ currentDate }}</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-action">
+        <i class="bi bi-download me-2"></i>Export Report
+      </button>
+      <button class="btn-action primary">
+        <i class="bi bi-plus-lg me-2"></i>New Project
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       STAT CARDS
+  ═══════════════════════════════════════════════ -->
+  <div class="stats-grid">
+    @for (stat of stats; track stat.title; let i = $index) {
+      <div class="stat-card" [style.animation-delay]="i * 80 + 'ms'">
+        <div class="stat-top">
+          <div class="stat-icon-wrap" [style.background]="stat.bg">
+            <i class="bi" [ngClass]="stat.icon" [style.color]="stat.color"></i>
+          </div>
+          <span class="stat-change" [class.positive]="stat.positive" [class.negative]="!stat.positive">
+            <i class="bi" [class.bi-arrow-up-right]="stat.positive" [class.bi-arrow-down-right]="!stat.positive"></i>
+            {{ stat.change }}
+          </span>
+        </div>
+        <div class="stat-value">{{ stat.value }}</div>
+        <div class="stat-title">{{ stat.title }}</div>
+        <div class="stat-bar">
+          <div class="stat-bar-fill" [style.background]="stat.color" [style.width]="'60%'"></div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       CHARTS ROW
+  ═══════════════════════════════════════════════ -->
+  <div class="charts-row">
+
+    <!-- Line Chart -->
+    <div class="chart-card wide">
+      <div class="chart-card-header">
+        <div>
+          <h3 class="chart-title">Traffic Overview</h3>
+          <p class="chart-subtitle">API requests & profile views over time</p>
+        </div>
+        <div class="chart-period">
+          <button class="period-btn active">7M</button>
+          <button class="period-btn">3M</button>
+          <button class="period-btn">1M</button>
+        </div>
+      </div>
+      <div class="chart-body">
+        <canvas #lineChart></canvas>
+      </div>
+    </div>
+
+    <!-- Donut Chart -->
+    <div class="chart-card narrow">
+      <div class="chart-card-header">
+        <div>
+          <h3 class="chart-title">Project Status</h3>
+          <p class="chart-subtitle">24 total projects</p>
+        </div>
+      </div>
+      <div class="chart-body donut-body">
+        <canvas #donutChart></canvas>
+      </div>
+      <div class="donut-center-stat">
+        <span class="donut-num">24</span>
+        <span class="donut-lbl">Projects</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       BOTTOM ROW — Projects + Skills + Bar Chart
+  ═══════════════════════════════════════════════ -->
+  <div class="bottom-row">
+
+    <!-- Recent Projects Table -->
+    <div class="data-card projects-card">
+      <div class="data-card-header">
+        <div>
+          <h3 class="chart-title">Recent Projects</h3>
+          <p class="chart-subtitle">Latest portfolio entries</p>
+        </div>
+        <a href="#" class="view-all-link">View all <i class="bi bi-arrow-right"></i></a>
+      </div>
+
+      <div class="table-wrap">
+        <table class="dash-table">
+          <thead>
+            <tr>
+              <th>Project</th>
+              <th>Client</th>
+              <th>Tech Stack</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (p of recentProjects; track p.name) {
+              <tr>
+                <td>
+                  <span class="project-name">{{ p.name }}</span>
+                </td>
+                <td>
+                  <span class="client-name">{{ p.client }}</span>
+                </td>
+                <td>
+                  <div class="tech-chips">
+                    @for (t of p.tech.slice(0, 2); track t) {
+                      <span class="tech-chip">{{ t }}</span>
+                    }
+                    @if (p.tech.length > 2) {
+                      <span class="tech-chip muted">+{{ p.tech.length - 2 }}</span>
+                    }
+                  </div>
+                </td>
+                <td>
+                  <span class="status-pill" [ngClass]="p.statusClass">
+                    <span class="status-dot"></span>
+                    {{ p.status }}
+                  </span>
+                </td>
+                <td>
+                  <span class="date-text">{{ p.date }}</span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Right column -->
+    <div class="right-col">
+
+      <!-- Skills Progress -->
+      <div class="data-card skills-card">
+        <div class="data-card-header">
+          <div>
+            <h3 class="chart-title">Top Skills</h3>
+            <p class="chart-subtitle">Proficiency levels</p>
+          </div>
+          <a href="#" class="view-all-link">View all</a>
+        </div>
+        <div class="skills-list">
+          @for (skill of topSkills; track skill.name; let i = $index) {
+            <div class="skill-row" [style.animation-delay]="i * 60 + 'ms'">
+              <div class="skill-info">
+                <span class="skill-name">{{ skill.name }}</span>
+                <span class="skill-pct" [style.color]="skill.color">{{ skill.level }}%</span>
+              </div>
+              <div class="skill-track">
+                <div
+                  class="skill-fill"
+                  [style.width]="skill.level + '%'"
+                  [style.background]="skill.color">
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Bar Chart -->
+      <div class="data-card bar-card">
+        <div class="data-card-header">
+          <div>
+            <h3 class="chart-title">Projects / Month</h3>
+            <p class="chart-subtitle">Completed per month</p>
+          </div>
+        </div>
+        <div class="chart-body bar-body">
+          <canvas #barChart></canvas>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
